@@ -17,12 +17,6 @@ Function New-LastName
    $return = $lastNames | Get-Random
    return $return
 }
-Function New-Department 
-{
-   Param($departmentList)
-   $return = $departmentList | Get-Random
-   return $return
-}
 Function New-RandomPassword 
 {
    $Length = 14
@@ -38,19 +32,19 @@ Function New-RandomPassword
 }
 Function New-FakePhoneNumber 
 {
-
    $areaCode = "772"
    $prefix = "834", "306"
    $numberList = "1","2","3","4","5","6","7","8","9","0"
    
-   $number = ($numberList | Get-Random)+($numberList | Get-Random)+($numberList | Get-Random)+($numberList | Get-Random)
-   [string]$PhoneNumber = ($areaCode | Get-Random) + ($prefix | Get-Random) + ($number)
+   [string]$PhoneNumber = ($areaCode | Get-Random) + ($prefix | Get-Random)
+   While($PhoneNumber.Length -lt 10){$PhoneNumber += ($numberList | Get-Random)}
    return $PhoneNumber 
 }
 Function New-EmployeeNumber 
 {
    $numberList = "1","2","3","4","5","6","7","8","9","0"
-   [string]$number = ($numberList | Get-Random)+($numberList | Get-Random)+($numberList | Get-Random)+($numberList | Get-Random)+($numberList | Get-Random)+($numberList | Get-Random)+($numberList | Get-Random)+($numberList | Get-Random)
+   [string]$number = ($numberList | Get-Random)
+   While($number.Length -lt 8){$number += ($numberList | Get-Random)}
    return $number 
 }
 
@@ -60,18 +54,27 @@ function New-RandomUser
        [string]$ouLocation
    )    
 
+   $allADUsers = Get-ADUser -Filter * -Properties SamAccountName, OfficePhone, lastNames
+   $password = New-RandomPassword
+
    $phone = New-FakePhoneNumber
-   [String]$password = New-RandomPassword
+   $EmployeeNumber
+   $GivenName = 
+   $surName = 
 
-   do
-   {
-      #creating new user
-      $GivenName = New-FirstName
-      $surName = New-LastName 
-      $SamAccountName = $($surName +$GivenName.Substring(0,1))
-   }while((Get-ADUser $SamAccountName) -ne $true)
+   $SamAccountName = 
 
-   $newUser = New-ADUser -Name ($GivenName+" "+$surName)-GivenName $GivenName -Surname $surName -AccountPassword (ConvertTo-SecureString $password -AsPlainText -Force) -OfficePhone $phone -Enabled $true -Department $dep -SamAccountName $SamAccountName -EmployeeNumber New-EmployeeNumber -DisplayName ($GivenName+" "+$surName) -EmailAddress ($GivenName+"."+$surName+"@"+$companyName+".com") -Path "$ouLocation" -PassThru
+
+
+
+
+
+
+
+
+
+
+   $newUser = New-ADUser -Name ($GivenName+" "+$surName)-GivenName $GivenName -Surname $surName -AccountPassword (ConvertTo-SecureString $password -AsPlainText -Force) -OfficePhone $phone -Enabled $true -Department $Department -SamAccountName $SamAccountName -EmployeeNumber $EmployeeNumber -DisplayName ($GivenName+" "+$surName) -EmailAddress ($GivenName+"."+$surName+"@"+$companyName+".com") -Path "$ouLocation" -PassThru
    return $newUser
 }
 
