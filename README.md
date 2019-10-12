@@ -3,7 +3,7 @@
 This Powershell script will deploy an organization that will be composed of a CEO, VPs, Managers and Employees.
 
 
-The script will also create an Organization unit called UserAccounts. The script will also create an Organization unit for each department and place the Departmet managers and employees with in that organization unit.
+The script will also create an Organization unit called UserAccountsand will create an Organization unit for each department to place the Departmet managers and employees with in that organization unit.
 
 CEO and VPs will be placed in the Administration OU.
 
