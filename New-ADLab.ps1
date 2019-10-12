@@ -1,4 +1,5 @@
-$companyName = "lab"
+$domainName = "lab"
+$topLevelDomain = "lcl"
 $CEODepartment = "Administration"
 $ManagersPerDepartment = 2
 $EmployeesPerManager = 10
@@ -7,15 +8,11 @@ $departmentList = "Customer Service", "Sales", "Marketing", "Legal", "Help Desk"
 #Functions
 Function New-FirstName 
 {
-   $firstNames = "Erich", "Domenic", "Wayne", "Darryl", "Luis", "Darell", "King", "Salvatore", "George", "Francis", "Sherwood", "Dino", "Patrick", "Burton", "Columbus", "Isaias", "Shad", "Todd", "Trent", "Garfield", "Frankie", "Lenny", "Scottie", "Romeo", "Jame", "Neville", "Terrance", "Clay", "Ulysses", "Gonzalo", "Fidel", "Virgil", "Bruno", "Rashad", "Archie", "Jeramy", "Cleo", "Yong", "Judson", "Earle", "Mack", "Tyrell", "Robbie", "Fermin", "Jamey", "Santos", "Pedro", "Albert", "Jerrold", "Arnulfo", "Ammie", "Susy", "Renay", "Terica", "Dalia", "Noemi", "Avelina", "Janelle", "Le", "Marquitta", "Kathe", "Lavada", "Lorine", "Delila", "Olga", "Lecia", "Dovie", "Theola", "Deann", "Donetta", "Elicia", "Vella", "Valery", "Verlene", "Cierra", "Kizzy", "Kerri", "Laurine", "Junie", "Lavonda", "Chieko", "Carissa", "Stefania", "Gina", "Neda", "Sunny", "Corazon", "Marylouise", "Anitra", "Elfriede", "Lillie", "Catalina", "Caron", "Pinkie", "Shanel", "Rachel", "Fay", "Matilde", "Renae", "Tish"
-   $return = $firstNames | Get-Random
-   Return $return
+   Return "Erich", "Domenic", "Wayne", "Darryl", "Luis", "Darell", "King", "Salvatore", "George", "Francis", "Sherwood", "Dino", "Patrick", "Burton", "Columbus", "Isaias", "Shad", "Todd", "Trent", "Garfield", "Frankie", "Lenny", "Scottie", "Romeo", "Jame", "Neville", "Terrance", "Clay", "Ulysses", "Gonzalo", "Fidel", "Virgil", "Bruno", "Rashad", "Archie", "Jeramy", "Cleo", "Yong", "Judson", "Earle", "Mack", "Tyrell", "Robbie", "Fermin", "Jamey", "Santos", "Pedro", "Albert", "Jerrold", "Arnulfo", "Ammie", "Susy", "Renay", "Terica", "Dalia", "Noemi", "Avelina", "Janelle", "Le", "Marquitta", "Kathe", "Lavada", "Lorine", "Delila", "Olga", "Lecia", "Dovie", "Theola", "Deann", "Donetta", "Elicia", "Vella", "Valery", "Verlene", "Cierra", "Kizzy", "Kerri", "Laurine", "Junie", "Lavonda", "Chieko", "Carissa", "Stefania", "Gina", "Neda", "Sunny", "Corazon", "Marylouise", "Anitra", "Elfriede", "Lillie", "Catalina", "Caron", "Pinkie", "Shanel", "Rachel", "Fay", "Matilde", "Renae", "Tish" | Get-Random
 }
 Function New-LastName 
 {
-   $lastNames = "Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin", "Thompson", "Garcia", "Martinez", "Robinson", "Clark", "Rodriguez", "Lewis", "Lee", "Walker", "Hall", "Allen", "Young", "Hernandez", "King", "Wright", "Lopez", "Hill", "Scott", "Green", "Adams", "Baker", "Gonzalez", "Nelson", "Carter", "Mitchell", "Perez", "Roberts", "Turner", "Phillips", "Campbell", "Parker", "Evans", "Edwards", "Collins", "Stewart", "Sanchez", "Morris", "Rogers", "Reed", "Cook", "Morgan", "Bell", "Murphy", "Bailey", "Rivera", "Cooper", "Richardson", "Cox", "Howard", "Ward", "Torres", "Peterson", "Gray", "Ramirez", "James", "Watson", "Brooks", "Kelly", "Sanders", "Price", "Bennett", "Wood", "Barnes", "Ross", "Henderson", "Coleman", "Jenkins", "Perry", "Powell", "Long", "Patterson", "Hughes", "Flores", "Washington", "Butler", "Simmons", "Foster", "Gonzales", "Bryant", "Alexander", "Russell", "Griffin", "Diaz", "Hayes"
-   $return = $lastNames | Get-Random
-   return $return
+   return "Smith", "Johnson", "Williams", "Jones", "Brown", "Davis", "Miller", "Wilson", "Moore", "Taylor", "Anderson", "Thomas", "Jackson", "White", "Harris", "Martin", "Thompson", "Garcia", "Martinez", "Robinson", "Clark", "Rodriguez", "Lewis", "Lee", "Walker", "Hall", "Allen", "Young", "Hernandez", "King", "Wright", "Lopez", "Hill", "Scott", "Green", "Adams", "Baker", "Gonzalez", "Nelson", "Carter", "Mitchell", "Perez", "Roberts", "Turner", "Phillips", "Campbell", "Parker", "Evans", "Edwards", "Collins", "Stewart", "Sanchez", "Morris", "Rogers", "Reed", "Cook", "Morgan", "Bell", "Murphy", "Bailey", "Rivera", "Cooper", "Richardson", "Cox", "Howard", "Ward", "Torres", "Peterson", "Gray", "Ramirez", "James", "Watson", "Brooks", "Kelly", "Sanders", "Price", "Bennett", "Wood", "Barnes", "Ross", "Henderson", "Coleman", "Jenkins", "Perry", "Powell", "Long", "Patterson", "Hughes", "Flores", "Washington", "Butler", "Simmons", "Foster", "Gonzales", "Bryant", "Alexander", "Russell", "Griffin", "Diaz", "Hayes" | Get-Random
 }
 Function New-RandomPassword 
 {
@@ -48,68 +45,71 @@ Function New-EmployeeNumber
    return $number 
 }
 
-function New-RandomUser
+function New-Employee
 {
-   Param([String]$Department,
-       [string]$ouLocation
-   )    
+   param (
+      [string]$Path,
+      [string]$Department
+  )
 
-   $allADUsers = Get-ADUser -Filter * -Properties SamAccountName, OfficePhone, lastNames
-   $password = New-RandomPassword
+   $EmployeeData = New-Object psobject -Property @{
+      Password = New-RandomPassword
+      Phone = New-FakePhoneNumber
+      EmployeeNumber = New-EmployeeNumber 
+      GivenName = New-FirstName
+      Surname = New-LastName
+   }
 
-   $phone = New-FakePhoneNumber
-   $EmployeeNumber
-   $GivenName = 
-   $surName = 
-
-   $SamAccountName = 
-
-
-
-
-
-
-
-
-
-
-
-   $newUser = New-ADUser -Name ($GivenName+" "+$surName)-GivenName $GivenName -Surname $surName -AccountPassword (ConvertTo-SecureString $password -AsPlainText -Force) -OfficePhone $phone -Enabled $true -Department $Department -SamAccountName $SamAccountName -EmployeeNumber $EmployeeNumber -DisplayName ($GivenName+" "+$surName) -EmailAddress ($GivenName+"."+$surName+"@"+$companyName+".com") -Path "$ouLocation" -PassThru
-   return $newUser
+   [Array]$userExist = Get-ADUser -Filter "Surname -like '$($EmployeeData.surName)*'" -Properties GivenName,Surname | Where-Object {$_.GivenName -eq $EmployeeData.GivenName}
+   $userExist += try{Get-ADUser -Identity ("$($EmployeeData.GivenName.Substring(0)[0])" + "$($EmployeeData.surName)")}catch{}
+   if($userExist.Surname.Count -gt 0)
+   {
+      $lastName = $userExist | Sort-Object -Property surName | Select-Object -Property surName -Last 1
+      [Int]$int = $lastName.surName.Substring(0) -replace "[a-zA-Z]", ""
+      $EmployeeData.Surname = ($EmployeeData.Surname + ($int = $int + 1))
+   }
+   [String]$SamAccountName = "$($EmployeeData.GivenName.Substring(0)[0])" + "$($EmployeeData.surName)"
+   return New-ADUser -Name ($EmployeeData.GivenName+" "+$EmployeeData.surName)-GivenName $EmployeeData.GivenName -Surname $EmployeeData.surName -AccountPassword (ConvertTo-SecureString $EmployeeData.password -AsPlainText -Force) -OfficePhone $phone -Enabled $true -Department $Department -SamAccountName $SamAccountName -EmployeeNumber $EmployeeNumber -DisplayName ($EmployeeData.GivenName+" "+$EmployeeData.surName) -EmailAddress ($EmployeeData.GivenName+"."+$EmployeeData.surName+"@"+$domainName+".$topLevelDomai") -Path $Path -PassThru
 }
 
 #create orgranization unit to store users
-$ouPath = "DC=$companyName,DC=lcl"
+$ouPath = "DC=$domainName,DC=$topLevelDomain"
 $ouName = "UserAccounts"
 $ouUserPath = "$("OU="+$ouName+","+$ouPath)"
 New-ADOrganizationalUnit -Name "$ouName" -Path "$ouPath" -ProtectedFromAccidentalDeletion $False
 
-#creating organization users
-$CEO = New-RandomUser -Department $CEODepartment -ouLocation $ouUserPath
+#creating CEO
+New-ADOrganizationalUnit -Name "$CEODepartment" -Path "$ouUserPath" -ProtectedFromAccidentalDeletion $False
+$CEO = New-Employee -Department "$CEODepartment" -Path $("OU=$CEODepartment," + $ouUserPath)
 Write-Output "Created CEO $($CEO.name)"
+
 Foreach ($deparment in $departmentList)
 {
-   $VP = New-RandomUser -Department $deparment -ouLocation $ouUserPath
+   #Creating VPs
+   $VP = New-Employee -Department "$CEODepartment" -Path $("OU=$CEODepartment," + $ouUserPath)
    Write-Output "Created VP $($VP.name)"
    Set-ADUser -Identity $VP -Manager $CEO
 
-   $Managers = @()
-   While ($Managers.count -lt $ManagersPerDepartment)
+   #Creating Department Oraganization Unit
+   New-ADOrganizationalUnit -Name "$deparment" -Path "$ouUserPath" -ProtectedFromAccidentalDeletion $False
+   
+   #Creating Managers
+   [Int]$ManCount = 0
+   While ([Int]$ManCount -lt $ManagersPerDepartment)
    {
-       $Manager = New-RandomUser -Department $deparment -ouLocation $ouUserPath
-       Write-Output "Created Manager $($Manager.name)"
-       Set-ADUser -Identity $Manager -Manager $VP
+      $Manager = New-Employee -Department $deparment -Path $("OU=$deparment," + $ouUserPath)
+      Set-ADUser -Identity $Manager -Manager $VP
+      Write-Output "Created Manager $($Manager.name)"
 
-       $Employees = @()
-       While($Employees.count -lt $EmployeesPerManager)
-       {
-           
-           $Employee = New-RandomUser -Department $deparment -ouLocation $ouUserPath
-           Write-Output "Created Employee $($Employee.name)"
-           Set-ADUser -Identity $Employee -Manager $Manager
-
-           $Employees += $Employee
-       }
-       $Managers += $Manager
+      #Creating Employees
+      [Int]$EmpCount = 0
+      While([Int]$EmpCount -lt $EmployeesPerManager)
+      {
+         $Employee = New-Employee -Department $deparment -Path $("OU=$deparment," + $ouUserPath)
+         Set-ADUser -Identity $Employee -Manager $Manager
+         Write-Output "Created Employee $($Employee.name)"
+         $EmpCount++
+      }
+      $ManCount++
    }
 }
