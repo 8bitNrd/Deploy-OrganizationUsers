@@ -19,6 +19,5 @@ When a user is created the script will also do the following:
   <img src="images/AD Structure.png">
 </p>
 
-Make sure you update the variables $domainName and $topLevelDomain to match your domain name and top-level domain.
 
 Hope you enjoy and that it saves you time
